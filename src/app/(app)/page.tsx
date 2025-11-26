@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Generate a developer portfolio from your Github profile with a click of a button",
 };
 
-export default async function Home() {
+export default async function Landing() {
   const session = await auth();
 
   if (session) {
