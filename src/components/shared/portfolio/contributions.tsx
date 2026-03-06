@@ -1,7 +1,7 @@
 import type { Octokit } from "@octokit/rest";
 import { GitPullRequest } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/ui";
+import { Button, Skeleton } from "@/components/ui";
 
 interface ContributionData {
   user: {
@@ -84,7 +84,7 @@ export async function Contributions({ login, octokit }: ContributionsProps) {
         <h3>Contributions</h3>
       </div>
       <div className="grid lg:grid-cols-3 gap-4">
-        {sortedRepositories?.map(({ repository, contributions }) => (
+        {sortedRepositories.map(({ repository, contributions }) => (
           <Button key={repository.name} variant="outline" size="app" asChild>
             <a href={repository.url} target="_blank">
               <Image
@@ -98,6 +98,34 @@ export async function Contributions({ login, octokit }: ContributionsProps) {
                 <p>{contributions.totalCount} contributions</p>
               </div>
             </a>
+          </Button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function ContributionsSkeleton() {
+  return (
+    <div className="grid gap-4">
+      <div className="flex items-center gap-2">
+        <GitPullRequest />
+        <h3>Contributions</h3>
+      </div>
+      <div className="grid lg:grid-cols-3 gap-4">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <Button
+            key={`contributions-fallback-${index + 1}`}
+            variant="outline"
+            size="app"
+            disabled
+            className="pointer-events-none"
+          >
+            <Skeleton className="h-10 w-10 rounded-md" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-4 w-24" />
+            </div>
           </Button>
         ))}
       </div>
