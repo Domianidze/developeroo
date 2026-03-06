@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { Portfolio } from "@/components";
+import { RequireAuth } from "@/components/shared/require-auth";
 import { title } from "@/lib";
 
 interface PortfolioEditProps {
@@ -22,11 +22,15 @@ export async function generateMetadata({
 export default async function PortfolioEdit({ params }: PortfolioEditProps) {
   const { login } = await params;
 
-  const session = await auth();
+  return (
+    <RequireAuth>
+      {({ user }) => {
+        if (user.login !== login || !user.accessToken) {
+          redirect("/");
+        }
 
-  if (login !== session?.user.login) {
-    redirect("/");
-  }
-
-  return <Portfolio login={login} session={session} />;
+        return <Portfolio login={login} accessToken={user.accessToken} />;
+      }}
+    </RequireAuth>
+  );
 }

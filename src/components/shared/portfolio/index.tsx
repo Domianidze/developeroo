@@ -1,16 +1,15 @@
 import { Octokit } from "@octokit/rest";
-import type { Session } from "next-auth";
 import { Contributions } from "./contributions";
 import { Profile } from "./profile";
 
 interface PortfolioProps {
   login: string;
-  session: Session;
+  accessToken: string;
 }
 
-export async function Portfolio({ login, session }: PortfolioProps) {
+export async function Portfolio({ login, accessToken }: PortfolioProps) {
   const octokit = new Octokit({
-    auth: session?.accessToken,
+    auth: accessToken,
   });
 
   return (

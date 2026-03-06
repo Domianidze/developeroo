@@ -1,1 +1,7 @@
-export { auth as middleware } from "@/auth"
+import { convexAuthNextjsMiddleware } from "@convex-dev/auth/nextjs/server";
+
+export default convexAuthNextjsMiddleware();
+
+export const config = {
+  matcher: ["/((?!_next|.*\\..*).*)"],
+};

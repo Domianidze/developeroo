@@ -1,3 +1,4 @@
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components";
 import "./globals.css";
@@ -12,7 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -28,7 +29,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ConvexAuthNextjsServerProvider>
+            {children}
+          </ConvexAuthNextjsServerProvider>
         </ThemeProvider>
       </body>
     </html>

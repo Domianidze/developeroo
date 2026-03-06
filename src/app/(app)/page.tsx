@@ -1,7 +1,9 @@
+import { api } from "@convex/_generated/api";
+import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
+import { fetchQuery } from "convex/nextjs";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { auth, signIn } from "@/auth";
-import { Button } from "@/components";
+import { SignInButton } from "@/components/landing";
 import { title } from "@/lib";
 
 export const metadata: Metadata = {
@@ -11,24 +13,19 @@ export const metadata: Metadata = {
 };
 
 export default async function Landing() {
-  const session = await auth();
+  const token = await convexAuthNextjsToken();
 
-  if (session) {
-    redirect(`/${session.user.login}/edit`);
+  if (token !== undefined) {
+    const user = await fetchQuery(api.users.current, {}, { token });
+
+    if (user?.login) {
+      redirect(`/${user.login}/edit`);
+    }
   }
 
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center gap-3">
-      <Button
-        variant="outline"
-        onClick={async () => {
-          "use server";
-
-          await signIn("github");
-        }}
-      >
-        Portfolio in an Instant
-      </Button>
+      <SignInButton />
     </div>
   );
 }
