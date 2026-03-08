@@ -1,15 +1,17 @@
 import { Octokit } from "@octokit/rest";
 import { Suspense } from "react";
+import { Contact, ContactSkeleton } from "./contact";
 import { Contributions, ContributionsSkeleton } from "./contributions";
 import { Profile, ProfileSkeleton } from "./profile";
 import { Repositories, RepositoriesSkeleton } from "./repositories";
 
 interface PortfolioProps {
   login: string;
-  accessToken: string;
+  accessToken?: string;
+  email?: string;
 }
 
-export function Portfolio({ login, accessToken }: PortfolioProps) {
+export function Portfolio({ login, accessToken, email }: PortfolioProps) {
   const octokit = new Octokit({
     auth: accessToken,
   });
@@ -24,6 +26,9 @@ export function Portfolio({ login, accessToken }: PortfolioProps) {
       </Suspense>
       <Suspense fallback={<ContributionsSkeleton />}>
         <Contributions login={login} octokit={octokit} />
+      </Suspense>
+      <Suspense fallback={<ContactSkeleton />}>
+        <Contact login={login} email={email} octokit={octokit} />
       </Suspense>
     </div>
   );

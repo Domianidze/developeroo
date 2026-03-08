@@ -76,20 +76,16 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
         <h3>Repositories</h3>
       </div>
       <div className="grid lg:grid-cols-3 gap-4">
-        {sortedRepositories.length > 0 ? (
-          sortedRepositories.map(({ id, url, name, commits_count }) => (
-            <Button key={id} variant="outline" size="app" asChild>
-              <a href={url} target="_blank" rel="noreferrer">
-                <div>
-                  <h4>{name}</h4>
-                  <p>{commits_count} commits</p>
-                </div>
-              </a>
-            </Button>
-          ))
-        ) : (
-          <p>No repositories found.</p>
-        )}
+        {sortedRepositories.map(({ id, url, name, commits_count }) => (
+          <Button key={id} variant="outline" size="app" asChild>
+            <a href={url} target="_blank" rel="noreferrer">
+              <div>
+                <h4>{name}</h4>
+                <p>{commits_count} commits</p>
+              </div>
+            </a>
+          </Button>
+        ))}
       </div>
     </div>
   );

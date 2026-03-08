@@ -25,11 +25,17 @@ export default async function PortfolioEdit({ params }: PortfolioEditProps) {
   return (
     <RequireAuth>
       {({ user }) => {
-        if (user.login !== login || !user.accessToken) {
-          redirect("/");
+        if (user.login !== login) {
+          redirect(`/${user.login}/edit`);
         }
 
-        return <Portfolio login={login} accessToken={user.accessToken} />;
+        return (
+          <Portfolio
+            login={login}
+            accessToken={user.accessToken}
+            email={user.email}
+          />
+        );
       }}
     </RequireAuth>
   );

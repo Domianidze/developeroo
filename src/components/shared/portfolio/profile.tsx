@@ -18,7 +18,7 @@ export async function Profile({ login, octokit }: ProfileProps) {
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-      <div className="relative h-37.5 w-37.5 shrink-0 overflow-hidden rounded-xl border shadow-xs dark:border-input">
+      <div className="relative size-37.5 shrink-0 overflow-hidden rounded-xl border shadow-xs dark:border-input">
         <Image
           src={data.avatar_url}
           alt="avatar"

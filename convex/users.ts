@@ -4,11 +4,11 @@ import { query } from "./_generated/server";
 
 export interface CurrentUser {
   id: GenericId<"users">;
-  name: string | null;
-  image: string | null;
-  email: string | null;
-  login: string | null;
-  accessToken: string | null;
+  name?: string;
+  image?: string;
+  email?: string;
+  login?: string;
+  accessToken?: string;
 }
 
 export const current = query({
@@ -28,11 +28,11 @@ export const current = query({
 
     const currentUser: CurrentUser = {
       id: user._id,
-      name: user.name ?? null,
-      image: user.image ?? null,
-      email: user.email ?? null,
-      login: user.login ?? null,
-      accessToken: user.accessToken ?? null,
+      name: user.name,
+      image: user.image,
+      email: user.email,
+      login: user.login,
+      accessToken: user.accessToken,
     };
 
     return currentUser;
