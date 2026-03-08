@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import { AtSign, Mail } from "lucide-react";
 import { SocialIcon } from "react-social-icons";
 import { Button, Skeleton } from "@/components/ui";
+import { SectionWrapper } from "./section-wrapper";
 
 interface ContactProps {
   login: string;
@@ -21,11 +22,7 @@ export async function Contact({ login, email, octokit }: ContactProps) {
   });
 
   return (
-    <div className="grid gap-4">
-      <div className="flex items-center gap-2">
-        <AtSign />
-        <h3>Contact</h3>
-      </div>
+    <SectionWrapper icon={AtSign} title="Contact">
       <div className="flex flex-wrap gap-2">
         {email ? (
           <Button variant="outline" size="sm" asChild>
@@ -44,17 +41,13 @@ export async function Contact({ login, email, octokit }: ContactProps) {
           </Button>
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }
 
 export function ContactSkeleton() {
   return (
-    <div className="grid gap-4">
-      <div className="flex items-center gap-2">
-        <AtSign />
-        <h3>Contact</h3>
-      </div>
+    <SectionWrapper icon={AtSign} title="Contact">
       <div className="flex flex-wrap gap-2">
         <Skeleton className="h-8 w-58 rounded-md" />
         {Array.from({ length: 4 }).map((_, index) => (
@@ -64,6 +57,6 @@ export function ContactSkeleton() {
           />
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }

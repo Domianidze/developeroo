@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import { GitPullRequest } from "lucide-react";
 import Image from "next/image";
 import { Button, Skeleton } from "@/components/ui";
+import { SectionWrapper } from "./section-wrapper";
 
 interface ContributionData {
   user: {
@@ -78,11 +79,7 @@ export async function Contributions({ login, octokit }: ContributionsProps) {
   );
 
   return (
-    <div className="grid gap-4">
-      <div className="flex items-center gap-2">
-        <GitPullRequest />
-        <h3>Contributions</h3>
-      </div>
+    <SectionWrapper icon={GitPullRequest} title="Contributions">
       <div className="grid lg:grid-cols-3 gap-4">
         {sortedRepositories.map(({ repository, contributions }) => (
           <Button key={repository.name} variant="outline" size="app" asChild>
@@ -101,17 +98,13 @@ export async function Contributions({ login, octokit }: ContributionsProps) {
           </Button>
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }
 
 export function ContributionsSkeleton() {
   return (
-    <div className="grid gap-4">
-      <div className="flex items-center gap-2">
-        <GitPullRequest />
-        <h3>Contributions</h3>
-      </div>
+    <SectionWrapper icon={GitPullRequest} title="Contributions">
       <div className="grid lg:grid-cols-3 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
           <Button
@@ -129,6 +122,6 @@ export function ContributionsSkeleton() {
           </Button>
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }

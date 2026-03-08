@@ -1,6 +1,7 @@
 import type { Octokit } from "@octokit/rest";
 import { FolderGit } from "lucide-react";
 import { Button, Skeleton } from "@/components/ui";
+import { SectionWrapper } from "./section-wrapper";
 
 interface RepositoriesProps {
   login: string;
@@ -70,11 +71,7 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
     .slice(0, 6);
 
   return (
-    <div className="grid gap-4">
-      <div className="flex items-center gap-2">
-        <FolderGit />
-        <h3>Repositories</h3>
-      </div>
+    <SectionWrapper icon={FolderGit} title="Repositories">
       <div className="grid lg:grid-cols-3 gap-4">
         {sortedRepositories.map(({ id, url, name, commits_count }) => (
           <Button key={id} variant="outline" size="app" asChild>
@@ -87,17 +84,13 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
           </Button>
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }
 
 export function RepositoriesSkeleton() {
   return (
-    <div className="grid gap-4">
-      <div className="flex items-center gap-2">
-        <FolderGit />
-        <h3>Repositories</h3>
-      </div>
+    <SectionWrapper icon={FolderGit} title="Repositories">
       <div className="grid lg:grid-cols-3 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
           <Button
@@ -114,6 +107,6 @@ export function RepositoriesSkeleton() {
           </Button>
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }
