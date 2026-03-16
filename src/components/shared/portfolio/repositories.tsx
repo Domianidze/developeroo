@@ -3,12 +3,58 @@ import { FolderGit } from "lucide-react";
 import { Button, Skeleton } from "@/components/ui";
 import { SectionWrapper } from "./section-wrapper";
 
-interface RepositoriesProps {
-  login: string;
-  octokit: Octokit;
+interface RepositoriesMarkupProps {
+  data?: {
+    id: string;
+    name?: string;
+    url?: string;
+    commitsCount?: number;
+  }[];
 }
 
-interface RepositoriesData {
+export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
+  const markupData =
+    data ??
+    Array.from({ length: 6 }, (_, index) => ({
+      id: `repositories-fallback-${index + 1}`,
+      name: undefined,
+      url: undefined,
+      commitsCount: undefined,
+    }));
+
+  return (
+    <SectionWrapper icon={FolderGit} title="Repositories">
+      <div className="grid lg:grid-cols-3 gap-4">
+        {markupData.map((item) => (
+          <Button
+            key={item.id}
+            variant="outline"
+            size="app"
+            asChild
+            disabled={!item.url}
+          >
+            <a href={item.url} target="_blank" rel="noreferrer">
+              <div>
+                {item.name ? (
+                  <h4>{item.name}</h4>
+                ) : (
+                  <Skeleton className="my-1 h-4 w-28" />
+                )}
+                {typeof item.commitsCount === "number" ? (
+                  <p>{item.commitsCount} commits</p>
+                ) : (
+                  <Skeleton className="my-1 h-4 w-20" />
+                )}
+              </div>
+            </a>
+          </Button>
+        ))}
+      </div>
+    </SectionWrapper>
+  );
+}
+
+interface RepositoriesQueryData {
   user: {
     repositories: {
       nodes: {
@@ -27,8 +73,13 @@ interface RepositoriesData {
   } | null;
 }
 
+interface RepositoriesProps {
+  login: string;
+  octokit: Octokit;
+}
+
 export async function Repositories({ login, octokit }: RepositoriesProps) {
-  const data: RepositoriesData = await octokit.graphql(
+  const response: RepositoriesQueryData = await octokit.graphql(
     `
       {
         user(login: "${login}") {
@@ -58,55 +109,21 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
     `,
   );
 
-  const repositories = data.user?.repositories.nodes ?? [];
+  const repositories = response.user?.repositories.nodes ?? [];
 
-  const sortedRepositories = repositories
+  const data = repositories
+    .sort(
+      ({ defaultBranchRef: a }, { defaultBranchRef: b }) =>
+        (b?.target?.history.totalCount ?? 0) -
+        (a?.target?.history.totalCount ?? 0),
+    )
     .map(({ id, name, url, defaultBranchRef }) => ({
       id,
       name,
       url,
-      commits_count: defaultBranchRef?.target?.history.totalCount ?? 0,
+      commitsCount: defaultBranchRef?.target?.history.totalCount ?? 0,
     }))
-    .sort(({ commits_count: a }, { commits_count: b }) => b - a)
     .slice(0, 6);
 
-  return (
-    <SectionWrapper icon={FolderGit} title="Repositories">
-      <div className="grid lg:grid-cols-3 gap-4">
-        {sortedRepositories.map(({ id, url, name, commits_count }) => (
-          <Button key={id} variant="outline" size="app" asChild>
-            <a href={url} target="_blank" rel="noreferrer">
-              <div>
-                <h4>{name}</h4>
-                <p>{commits_count} commits</p>
-              </div>
-            </a>
-          </Button>
-        ))}
-      </div>
-    </SectionWrapper>
-  );
-}
-
-export function RepositoriesSkeleton() {
-  return (
-    <SectionWrapper icon={FolderGit} title="Repositories">
-      <div className="grid lg:grid-cols-3 gap-4">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <Button
-            key={`repositories-fallback-${index + 1}`}
-            variant="outline"
-            size="app"
-            disabled
-            className="pointer-events-none"
-          >
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-4 w-20" />
-            </div>
-          </Button>
-        ))}
-      </div>
-    </SectionWrapper>
-  );
+  return <RepositoriesMarkup data={data} />;
 }

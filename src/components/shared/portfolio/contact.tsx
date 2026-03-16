@@ -4,10 +4,56 @@ import { SocialIcon } from "react-social-icons";
 import { Button, Skeleton } from "@/components/ui";
 import { SectionWrapper } from "./section-wrapper";
 
-interface ContactProps {
-  login: string;
+interface ContactMarkupProps {
   email?: string;
-  octokit: Octokit;
+  data?: {
+    id: string;
+    url?: string;
+    label?: string;
+  }[];
+}
+
+export function ContactMarkup({ email, data }: ContactMarkupProps) {
+  data ??= Array.from({ length: 4 }, (_, index) => ({
+    id: `contact-fallback-${index + 1}`,
+    url: undefined,
+    label: undefined,
+  }));
+
+  return (
+    <SectionWrapper icon={AtSign} title="Contact">
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" size="sm" asChild disabled={!email}>
+          <a href={email ? `mailto:${email}` : undefined}>
+            {email ? (
+              <Mail className="size-4" />
+            ) : (
+              <Skeleton className="size-4 rounded-full" />
+            )}
+            {email ?? <Skeleton className="h-4 w-52" />}
+          </a>
+        </Button>
+        {data.map((item) => (
+          <Button
+            key={item.id}
+            variant="outline"
+            size="sm"
+            asChild
+            disabled={!item.url}
+          >
+            <a href={item.url} target="_blank" rel="noreferrer">
+              {item.url ? (
+                <SocialIcon as="div" url={item.url} className="size-4!" />
+              ) : (
+                <Skeleton className="size-4 rounded-full" />
+              )}
+              {item.label ?? <Skeleton className="h-4 w-42" />}
+            </a>
+          </Button>
+        ))}
+      </div>
+    </SectionWrapper>
+  );
 }
 
 function getLabel(url: string): string {
@@ -16,47 +62,22 @@ function getLabel(url: string): string {
   return pathname.replace(/^\/+|\/+$/g, "");
 }
 
+interface ContactProps {
+  login: string;
+  email?: string;
+  octokit: Octokit;
+}
+
 export async function Contact({ login, email, octokit }: ContactProps) {
-  const { data } = await octokit.users.listSocialAccountsForUser({
+  const response = await octokit.users.listSocialAccountsForUser({
     username: login,
   });
 
-  return (
-    <SectionWrapper icon={AtSign} title="Contact">
-      <div className="flex flex-wrap gap-2">
-        {email ? (
-          <Button variant="outline" size="sm" asChild>
-            <a href={`mailto:${email}`}>
-              <Mail className="size-4" />
-              {email}
-            </a>
-          </Button>
-        ) : null}
-        {data.map(({ url }) => (
-          <Button key={url} variant="outline" size="sm" asChild>
-            <a href={url} target="_blank" rel="noreferrer">
-              <SocialIcon as="div" url={url} className="size-4!" />
-              {getLabel(url)}
-            </a>
-          </Button>
-        ))}
-      </div>
-    </SectionWrapper>
-  );
-}
+  const data = response.data.slice(0, 4).map(({ url }, index) => ({
+    id: `contact-${index + 1}`,
+    url,
+    label: getLabel(url),
+  }));
 
-export function ContactSkeleton() {
-  return (
-    <SectionWrapper icon={AtSign} title="Contact">
-      <div className="flex flex-wrap gap-2">
-        <Skeleton className="h-8 w-58 rounded-md" />
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton
-            key={`contact-fallback-${index + 1}`}
-            className="h-8 w-48 rounded-md"
-          />
-        ))}
-      </div>
-    </SectionWrapper>
-  );
+  return <ContactMarkup email={email} data={data} />;
 }

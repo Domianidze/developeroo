@@ -4,7 +4,70 @@ import Image from "next/image";
 import { Button, Skeleton } from "@/components/ui";
 import { SectionWrapper } from "./section-wrapper";
 
-interface ContributionData {
+interface ContributionsMarkupProps {
+  data?: {
+    id: string;
+    name?: string;
+    url?: string;
+    avatarUrl?: string;
+    totalCount?: number;
+  }[];
+}
+
+export function ContributionsMarkup({ data }: ContributionsMarkupProps) {
+  const markupData =
+    data ??
+    Array.from({ length: 6 }, (_, index) => ({
+      id: `contributions-fallback-${index + 1}`,
+      name: undefined,
+      url: undefined,
+      avatarUrl: undefined,
+      totalCount: undefined,
+    }));
+
+  return (
+    <SectionWrapper icon={GitPullRequest} title="Contributions">
+      <div className="grid lg:grid-cols-3 gap-4">
+        {markupData.map((item) => (
+          <Button
+            key={item.id}
+            variant="outline"
+            size="app"
+            asChild
+            disabled={!item.url}
+          >
+            <a href={item.url} target="_blank" rel="noreferrer">
+              {item.avatarUrl ? (
+                <Image
+                  src={item.avatarUrl}
+                  alt={item.name ?? "repository"}
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <Skeleton className="h-10 w-10 rounded-md" />
+              )}
+              <div>
+                {item.name ? (
+                  <h4>{item.name}</h4>
+                ) : (
+                  <Skeleton className="my-1 h-4 w-28" />
+                )}
+                {typeof item.totalCount === "number" ? (
+                  <p>{item.totalCount} contributions</p>
+                ) : (
+                  <Skeleton className="my-1 h-4 w-24" />
+                )}
+              </div>
+            </a>
+          </Button>
+        ))}
+      </div>
+    </SectionWrapper>
+  );
+}
+
+interface ContributionsQueryData {
   user: {
     contributionsCollection: {
       pullRequestContributionsByRepository: {
@@ -38,7 +101,7 @@ interface ContributionsProps {
 }
 
 export async function Contributions({ login, octokit }: ContributionsProps) {
-  const data: ContributionData = await octokit.graphql(
+  const response: ContributionsQueryData = await octokit.graphql(
     `
         {
           user(login: "${login}") {
@@ -71,57 +134,20 @@ export async function Contributions({ login, octokit }: ContributionsProps) {
   );
 
   const repositories =
-    data.user.contributionsCollection.pullRequestContributionsByRepository;
+    response.user.contributionsCollection.pullRequestContributionsByRepository;
 
-  const sortedRepositories = repositories.sort(
-    ({ repository: a }, { repository: b }) =>
-      b.stargazers.totalCount - a.stargazers.totalCount,
-  );
+  const data = repositories
+    .sort(
+      ({ repository: a }, { repository: b }) =>
+        b.stargazers.totalCount - a.stargazers.totalCount,
+    )
+    .map(({ repository, contributions }) => ({
+      id: repository.name,
+      name: repository.name,
+      url: repository.url,
+      avatarUrl: repository.owner.avatarUrl,
+      totalCount: contributions.totalCount,
+    }));
 
-  return (
-    <SectionWrapper icon={GitPullRequest} title="Contributions">
-      <div className="grid lg:grid-cols-3 gap-4">
-        {sortedRepositories.map(({ repository, contributions }) => (
-          <Button key={repository.name} variant="outline" size="app" asChild>
-            <a href={repository.url} target="_blank">
-              <Image
-                src={repository.owner.avatarUrl}
-                alt={repository.name}
-                width={40}
-                height={40}
-              />
-              <div>
-                <h4>{repository.name}</h4>
-                <p>{contributions.totalCount} contributions</p>
-              </div>
-            </a>
-          </Button>
-        ))}
-      </div>
-    </SectionWrapper>
-  );
-}
-
-export function ContributionsSkeleton() {
-  return (
-    <SectionWrapper icon={GitPullRequest} title="Contributions">
-      <div className="grid lg:grid-cols-3 gap-4">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <Button
-            key={`contributions-fallback-${index + 1}`}
-            variant="outline"
-            size="app"
-            disabled
-            className="pointer-events-none"
-          >
-            <Skeleton className="h-10 w-10 rounded-md" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-          </Button>
-        ))}
-      </div>
-    </SectionWrapper>
-  );
+  return <ContributionsMarkup data={data} />;
 }

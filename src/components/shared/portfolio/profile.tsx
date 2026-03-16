@@ -3,77 +3,107 @@ import { Building, MapPin, User } from "lucide-react";
 import Image from "next/image";
 import type { PropsWithChildren } from "react";
 import { Skeleton } from "@/components/ui";
+import { cn } from "@/lib";
+
+function DetailWrapper({ children }: PropsWithChildren) {
+  return <div className="flex items-center gap-2">{children}</div>;
+}
+
+interface DetailsProps {
+  name?: string | null;
+  location?: string | null;
+  company?: string | null;
+  className?: string;
+}
+
+function Details({ name, location, company, className }: DetailsProps) {
+  return (
+    <div className={cn("flex gap-4 text-sm", className)}>
+      <DetailWrapper>
+        <User />
+        {name ? <span>{name}</span> : <Skeleton className="h-4 w-30" />}
+      </DetailWrapper>
+      <DetailWrapper>
+        <MapPin />
+        {location ? <span>{location}</span> : <Skeleton className="h-4 w-30" />}
+      </DetailWrapper>
+      <DetailWrapper>
+        <Building />
+        {company ? <span>{company}</span> : <Skeleton className="h-4 w-30" />}
+      </DetailWrapper>
+    </div>
+  );
+}
+
+interface ProfileMarkupProps {
+  data?: {
+    avatarUrl?: string;
+    name?: string | null;
+    location?: string | null;
+    company?: string | null;
+    bio?: string | null;
+  };
+}
+
+export function ProfileMarkup({ data }: ProfileMarkupProps) {
+  return (
+    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+      <div className="flex items-center gap-4 lg:block">
+        <div className="relative size-37.5 shrink-0 overflow-hidden rounded-xl border shadow-xs dark:border-input">
+          {data?.avatarUrl ? (
+            <Image
+              src={data.avatarUrl}
+              alt="avatar"
+              fill
+              sizes="150px"
+              className="object-cover"
+            />
+          ) : (
+            <Skeleton className="h-full w-full" />
+          )}
+        </div>
+        <Details
+          name={data?.name}
+          location={data?.location}
+          company={data?.company}
+          className="flex-col lg:hidden"
+        />
+      </div>
+      <div className="w-full lg:space-y-4">
+        <Details
+          name={data?.name}
+          location={data?.location}
+          company={data?.company}
+          className="hidden lg:flex flex-row justify-between items-center"
+        />
+        {data?.bio ? (
+          <p className="text-sm">{data.bio}</p>
+        ) : (
+          <div className="space-y-1">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 interface ProfileProps {
   login: string;
   octokit: Octokit;
 }
 
-function DetailWrapper({ children }: PropsWithChildren) {
-  return <div className="flex items-center gap-2">{children}</div>;
-}
-
 export async function Profile({ login, octokit }: ProfileProps) {
-  const { data } = await octokit.users.getByUsername({ username: login });
+  const response = await octokit.users.getByUsername({ username: login });
 
-  return (
-    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-      <div className="relative size-37.5 shrink-0 overflow-hidden rounded-xl border shadow-xs dark:border-input">
-        <Image
-          src={data.avatar_url}
-          alt="avatar"
-          fill
-          sizes="150px"
-          className="object-cover"
-        />
-      </div>
-      <div className="text-sm space-y-4">
-        <div className="flex flex-col lg:flex-row justify-between gap-4 lg:items-center">
-          <DetailWrapper>
-            <User />
-            <span>{data.name}</span>
-          </DetailWrapper>
-          <DetailWrapper>
-            <MapPin />
-            <span>{data.location}</span>
-          </DetailWrapper>
-          <DetailWrapper>
-            <Building />
-            <span>{data.company}</span>
-          </DetailWrapper>
-        </div>
-        <p>{data.bio}</p>
-      </div>
-    </div>
-  );
-}
+  const data = {
+    avatarUrl: response.data.avatar_url,
+    name: response.data.name,
+    location: response.data.location,
+    company: response.data.company,
+    bio: response.data.bio,
+  };
 
-export function ProfileSkeleton() {
-  return (
-    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-      <div className="relative h-37.5 w-37.5 shrink-0">
-        <Skeleton className="h-full w-full rounded-xl border shadow-xs dark:border-input" />
-      </div>
-      <div className="text-sm space-y-4 flex-1">
-        <div className="flex flex-col lg:flex-row justify-between gap-4 lg:items-center">
-          <DetailWrapper>
-            <User />
-            <Skeleton className="h-4 w-28" />
-          </DetailWrapper>
-          <DetailWrapper>
-            <MapPin />
-            <Skeleton className="h-4 w-24" />
-          </DetailWrapper>
-          <DetailWrapper>
-            <Building />
-            <Skeleton className="h-4 w-32" />
-          </DetailWrapper>
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-4/5" />
-        </div>
-      </div>
-    </div>
-  );
+  return <ProfileMarkup data={data} />;
 }
