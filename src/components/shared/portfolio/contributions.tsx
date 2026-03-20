@@ -1,5 +1,5 @@
 import type { Octokit } from "@octokit/rest";
-import { GitPullRequest } from "lucide-react";
+import { GitPullRequest, Star } from "lucide-react";
 import Image from "next/image";
 import { Button, Skeleton } from "@/components/ui";
 import { SectionWrapper } from "./section-wrapper";
@@ -11,6 +11,7 @@ interface ContributionsMarkupProps {
     url?: string;
     avatarUrl?: string;
     totalCount?: number;
+    starsCount?: number;
   }[];
 }
 
@@ -23,6 +24,7 @@ export function ContributionsMarkup({ data }: ContributionsMarkupProps) {
       url: undefined,
       avatarUrl: undefined,
       totalCount: undefined,
+      starsCount: undefined,
     }));
 
   return (
@@ -34,9 +36,19 @@ export function ContributionsMarkup({ data }: ContributionsMarkupProps) {
             variant="outline"
             size="app"
             asChild
+            className="relative"
             disabled={!item.url}
           >
             <a href={item.url} target="_blank" rel="noreferrer">
+              {typeof item.starsCount === "number" && item.starsCount > 0 ? (
+                <div
+                  className="absolute top-2 right-2 flex items-center gap-1 text-xs text-muted-foreground"
+                  title={`${item.starsCount} stars`}
+                >
+                  <Star className="size-4" />
+                  <span>{item.starsCount}</span>
+                </div>
+              ) : null}
               {item.avatarUrl ? (
                 <Image
                   src={item.avatarUrl}
@@ -147,6 +159,7 @@ export async function Contributions({ login, octokit }: ContributionsProps) {
       url: repository.url,
       avatarUrl: repository.owner.avatarUrl,
       totalCount: contributions.totalCount,
+      starsCount: repository.stargazers.totalCount,
     }));
 
   return <ContributionsMarkup data={data} />;

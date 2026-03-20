@@ -1,5 +1,5 @@
 import type { Octokit } from "@octokit/rest";
-import { FolderGit, Pin } from "lucide-react";
+import { FolderGit, Pin, Star } from "lucide-react";
 import { Button, Skeleton } from "@/components/ui";
 import { SectionWrapper } from "./section-wrapper";
 
@@ -9,6 +9,7 @@ interface RepositoriesMarkupProps {
     name?: string;
     url?: string;
     commitsCount?: number;
+    starsCount?: number;
     isPinned?: boolean;
   }[];
 }
@@ -21,6 +22,7 @@ export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
       name: undefined,
       url: undefined,
       commitsCount: undefined,
+      starsCount: undefined,
       isPinned: undefined,
     }));
 
@@ -37,11 +39,23 @@ export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
             disabled={!item.url}
           >
             <a href={item.url} target="_blank" rel="noreferrer">
-              {item.isPinned ? (
-                <Pin
-                  className="absolute top-2 right-2 size-4 text-muted-foreground"
-                  aria-label="Pinned repository"
-                />
+              {(typeof item.starsCount === "number" && item.starsCount > 0) ||
+              item.isPinned ? (
+                <div className="absolute top-2 right-2 flex items-center gap-2 text-muted-foreground">
+                  {typeof item.starsCount === "number" &&
+                  item.starsCount > 0 ? (
+                    <div
+                      className="flex items-center gap-1 text-xs"
+                      title={`${item.starsCount} stars`}
+                    >
+                      <Star className="size-4" />
+                      <span>{item.starsCount}</span>
+                    </div>
+                  ) : null}
+                  {item.isPinned ? (
+                    <Pin className="size-4" aria-label="Pinned repository" />
+                  ) : null}
+                </div>
               ) : null}
               <div>
                 {item.name ? (
@@ -81,6 +95,7 @@ interface RepositoriesQueryData {
             };
           } | null;
         } | null;
+        stargazerCount: number;
       }[];
     };
     repositories: {
@@ -88,6 +103,7 @@ interface RepositoriesQueryData {
         id: string;
         name: string;
         url: string;
+        stargazerCount: number;
         defaultBranchRef: {
           target: {
             history: {
@@ -116,6 +132,7 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
                 id
                 name
                 url
+                stargazerCount
                 owner {
                   login
                 }
@@ -142,6 +159,7 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
               id
               name
               url
+              stargazerCount
               defaultBranchRef {
                 target {
                   ... on Commit {
@@ -177,11 +195,12 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
     );
 
   const data = [...pinnedRepositories, ...remainingRepositories]
-    .map(({ id, name, url, defaultBranchRef }) => ({
+    .map(({ id, name, url, defaultBranchRef, stargazerCount }) => ({
       id,
       name,
       url,
       commitsCount: defaultBranchRef?.target?.history.totalCount ?? 0,
+      starsCount: stargazerCount,
       isPinned: pinnedIds.has(id),
     }))
     .slice(0, 6);
