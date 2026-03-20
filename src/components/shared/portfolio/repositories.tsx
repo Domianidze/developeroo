@@ -48,7 +48,7 @@ export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
                       className="flex items-center gap-1 text-xs"
                       title={`${item.starsCount} stars`}
                     >
-                      <Star className="size-4" />
+                      <Star className="size-4 text-yellow-500 fill-yellow-500/20" />
                       <span>{item.starsCount}</span>
                     </div>
                   ) : null}

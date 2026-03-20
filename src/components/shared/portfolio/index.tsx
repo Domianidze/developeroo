@@ -4,6 +4,7 @@ import { Contact, ContactMarkup } from "./contact";
 import { Contributions, ContributionsMarkup } from "./contributions";
 import { Profile, ProfileMarkup } from "./profile";
 import { Repositories, RepositoriesMarkup } from "./repositories";
+import { Skills, SkillsMarkup } from "./skills";
 
 interface PortfolioProps {
   login: string;
@@ -20,6 +21,9 @@ export function Portfolio({ login, accessToken, email }: PortfolioProps) {
     <div className="py-10 lg:py-20 mx-auto flex flex-col gap-10 w-4xl max-w-full px-5">
       <Suspense fallback={<ProfileMarkup />}>
         <Profile login={login} octokit={octokit} />
+      </Suspense>
+      <Suspense fallback={<SkillsMarkup />}>
+        <Skills login={login} octokit={octokit} />
       </Suspense>
       <Suspense fallback={<RepositoriesMarkup />}>
         <Repositories login={login} octokit={octokit} />
