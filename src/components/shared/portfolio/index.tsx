@@ -20,12 +20,14 @@ export function Portfolio({ login, accessToken, email }: PortfolioProps) {
 
   return (
     <div className="py-10 lg:py-20 mx-auto flex flex-col gap-10 w-4xl max-w-full px-5">
-      <Suspense fallback={<ProfileMarkup />}>
-        <Profile login={login} octokit={octokit} />
-      </Suspense>
-      <Suspense fallback={<OverviewMarkup />}>
-        <Overview login={login} octokit={octokit} />
-      </Suspense>
+      <div className="flex flex-col gap-4">
+        <Suspense fallback={<ProfileMarkup />}>
+          <Profile login={login} octokit={octokit} />
+        </Suspense>
+        <Suspense fallback={<OverviewMarkup />}>
+          <Overview login={login} octokit={octokit} />
+        </Suspense>
+      </div>
       <Suspense fallback={<SkillsMarkup />}>
         <Skills login={login} octokit={octokit} />
       </Suspense>

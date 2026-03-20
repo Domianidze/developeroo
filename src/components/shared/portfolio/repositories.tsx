@@ -4,6 +4,7 @@ import { Button, Skeleton } from "@/components/ui";
 import { SectionWrapper } from "./section-wrapper";
 
 interface RepositoriesMarkupProps {
+  login?: string;
   data?: {
     id: string;
     name?: string;
@@ -14,7 +15,7 @@ interface RepositoriesMarkupProps {
   }[];
 }
 
-export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
+export function RepositoriesMarkup({ login, data }: RepositoriesMarkupProps) {
   const markupData =
     data ??
     Array.from({ length: 6 }, (_, index) => ({
@@ -27,7 +28,13 @@ export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
     }));
 
   return (
-    <SectionWrapper icon={FolderGit} title="Repositories">
+    <SectionWrapper
+      icon={FolderGit}
+      title="Repositories"
+      viewAllUrl={
+        login ? `https://github.com/${login}?tab=repositories` : undefined
+      }
+    >
       <div className="grid lg:grid-cols-3 gap-4">
         {markupData.map((item) => (
           <Button
@@ -205,5 +212,5 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
     }))
     .slice(0, 6);
 
-  return <RepositoriesMarkup data={data} />;
+  return <RepositoriesMarkup login={login} data={data} />;
 }
