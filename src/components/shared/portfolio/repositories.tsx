@@ -1,5 +1,5 @@
 import type { Octokit } from "@octokit/rest";
-import { FolderGit } from "lucide-react";
+import { FolderGit, Pin } from "lucide-react";
 import { Button, Skeleton } from "@/components/ui";
 import { SectionWrapper } from "./section-wrapper";
 
@@ -9,6 +9,7 @@ interface RepositoriesMarkupProps {
     name?: string;
     url?: string;
     commitsCount?: number;
+    isPinned?: boolean;
   }[];
 }
 
@@ -20,6 +21,7 @@ export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
       name: undefined,
       url: undefined,
       commitsCount: undefined,
+      isPinned: undefined,
     }));
 
   return (
@@ -31,9 +33,16 @@ export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
             variant="outline"
             size="app"
             asChild
+            className="relative"
             disabled={!item.url}
           >
             <a href={item.url} target="_blank" rel="noreferrer">
+              {item.isPinned ? (
+                <Pin
+                  className="absolute top-2 right-2 size-4 text-muted-foreground"
+                  aria-label="Pinned repository"
+                />
+              ) : null}
               <div>
                 {item.name ? (
                   <h4>{item.name}</h4>
@@ -56,6 +65,24 @@ export function RepositoriesMarkup({ data }: RepositoriesMarkupProps) {
 
 interface RepositoriesQueryData {
   user: {
+    pinnedItems: {
+      nodes: {
+        id: string;
+        name: string;
+        url: string;
+        owner: {
+          login: string;
+        };
+        isFork: boolean;
+        defaultBranchRef: {
+          target: {
+            history: {
+              totalCount: number;
+            };
+          } | null;
+        } | null;
+      }[];
+    };
     repositories: {
       nodes: {
         id: string;
@@ -83,6 +110,28 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
     `
       {
         user(login: "${login}") {
+          pinnedItems(first: 6, types: REPOSITORY) {
+            nodes {
+              ... on Repository {
+                id
+                name
+                url
+                owner {
+                  login
+                }
+                isFork
+                defaultBranchRef {
+                  target {
+                    ... on Commit {
+                      history(first: 1) {
+                        totalCount
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
           repositories(
             first: 100
             ownerAffiliations: OWNER
@@ -110,18 +159,30 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
   );
 
   const repositories = response.user?.repositories.nodes ?? [];
-
-  const data = repositories
+  const pinnedRepositories = (response.user?.pinnedItems.nodes ?? [])
+    .filter(({ owner, isFork }) => owner.login === login && !isFork)
     .sort(
       ({ defaultBranchRef: a }, { defaultBranchRef: b }) =>
         (b?.target?.history.totalCount ?? 0) -
         (a?.target?.history.totalCount ?? 0),
-    )
+    );
+
+  const pinnedIds = new Set(pinnedRepositories.map(({ id }) => id));
+  const remainingRepositories = repositories
+    .filter(({ id }) => !pinnedIds.has(id))
+    .sort(
+      ({ defaultBranchRef: a }, { defaultBranchRef: b }) =>
+        (b?.target?.history.totalCount ?? 0) -
+        (a?.target?.history.totalCount ?? 0),
+    );
+
+  const data = [...pinnedRepositories, ...remainingRepositories]
     .map(({ id, name, url, defaultBranchRef }) => ({
       id,
       name,
       url,
       commitsCount: defaultBranchRef?.target?.history.totalCount ?? 0,
+      isPinned: pinnedIds.has(id),
     }))
     .slice(0, 6);
 
