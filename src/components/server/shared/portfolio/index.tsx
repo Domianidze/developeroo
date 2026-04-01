@@ -1,5 +1,6 @@
-import { Octokit } from "@octokit/rest";
+import type { Octokit } from "@octokit/rest";
 import { Suspense } from "react";
+import { type GitHubAuthMode, getGitHubClient } from "@/lib/server";
 import { Contact, ContactMarkup } from "./contact";
 import { Contributions, ContributionsMarkup } from "./contributions";
 import { Overview, OverviewMarkup } from "./overview";
@@ -9,14 +10,12 @@ import { Skills, SkillsMarkup } from "./skills";
 
 interface PortfolioProps {
   login: string;
-  accessToken?: string;
+  authMode: GitHubAuthMode;
   email?: string;
 }
 
-export function Portfolio({ login, accessToken, email }: PortfolioProps) {
-  const octokit = new Octokit({
-    auth: accessToken,
-  });
+export async function Portfolio({ login, authMode, email }: PortfolioProps) {
+  const octokit: Octokit = await getGitHubClient(authMode);
 
   return (
     <div className="py-10 lg:py-20 mx-auto flex flex-col gap-10 w-4xl max-w-full px-5">

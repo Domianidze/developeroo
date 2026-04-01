@@ -1,2 +1,2 @@
-export * from "./shared";
+export * from "./landing";
 export * from "./ui";

@@ -1,9 +1,6 @@
-import { api } from "@convex/_generated/api";
-import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
-import { fetchQuery } from "convex/nextjs";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { SignInButton } from "@/components/landing";
+import { SignInButton } from "@/components";
+import { RequireGuest } from "@/components/server";
 import { title } from "@/lib";
 
 export const metadata: Metadata = {
@@ -13,19 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Landing() {
-  const token = await convexAuthNextjsToken();
-
-  if (token !== undefined) {
-    const user = await fetchQuery(api.users.current, {}, { token });
-
-    if (user?.login) {
-      redirect(`/${user.login}/edit`);
-    }
-  }
-
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center gap-3">
-      <SignInButton />
-    </div>
+    <RequireGuest>
+      <div className="w-full h-screen flex flex-col justify-center items-center gap-3">
+        <SignInButton />
+      </div>
+    </RequireGuest>
   );
 }

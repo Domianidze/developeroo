@@ -1,6 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import type { GenericId } from "convex/values";
 import { query } from "./_generated/server";
+import { decrypt } from "./lib/crypto";
 
 export interface CurrentUser {
   id: GenericId<"users">;
@@ -8,7 +9,6 @@ export interface CurrentUser {
   image?: string;
   email?: string;
   login?: string;
-  accessToken?: string;
 }
 
 export const current = query({
@@ -32,9 +32,27 @@ export const current = query({
       image: user.image,
       email: user.email,
       login: user.login,
-      accessToken: user.accessToken,
     };
 
     return currentUser;
+  },
+});
+
+export const currentAccessToken = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      return null;
+    }
+
+    const user = await ctx.db.get(userId);
+
+    if (!user?.accessToken) {
+      return null;
+    }
+
+    return await decrypt(user.accessToken);
   },
 });

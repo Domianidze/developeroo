@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Portfolio } from "@/components";
-import { RequireAuth } from "@/components/shared/require-auth";
+import { Portfolio, RequireAuth } from "@/components/server";
 import { title } from "@/lib";
 
 interface PortfolioEditProps {
@@ -29,13 +28,7 @@ export default async function PortfolioEdit({ params }: PortfolioEditProps) {
           redirect(`/${user.login}/edit`);
         }
 
-        return (
-          <Portfolio
-            login={login}
-            accessToken={user.accessToken}
-            email={user.email}
-          />
-        );
+        return <Portfolio login={login} authMode="owner" email={user.email} />;
       }}
     </RequireAuth>
   );
