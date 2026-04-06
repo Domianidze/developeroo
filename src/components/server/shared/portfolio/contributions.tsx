@@ -34,44 +34,42 @@ export function ContributionsMarkup({ data }: ContributionsMarkupProps) {
           <Button
             key={item.id}
             variant="outline"
-            size="app"
-            asChild
-            className="relative"
+            className="relative h-18 justify-start gap-4 rounded-lg px-4 text-left [&_img]:rounded-md"
             disabled={!item.url}
+            nativeButton={false}
+            render={<a href={item.url} target="_blank" rel="noreferrer" />}
           >
-            <a href={item.url} target="_blank" rel="noreferrer">
-              {typeof item.starsCount === "number" && item.starsCount > 0 ? (
-                <div
-                  className="absolute top-2 right-2 flex items-center gap-1 text-xs text-muted-foreground"
-                  title={`${item.starsCount} stars`}
-                >
-                  <Star className="size-4 text-yellow-500 fill-yellow-500/20" />
-                  <span>{item.starsCount}</span>
-                </div>
-              ) : null}
-              {item.avatarUrl ? (
-                <Image
-                  src={item.avatarUrl}
-                  alt={item.name ?? "repository"}
-                  width={40}
-                  height={40}
-                />
-              ) : (
-                <Skeleton className="h-10 w-10 rounded-md" />
-              )}
-              <div>
-                {item.name ? (
-                  <h4>{item.name}</h4>
-                ) : (
-                  <Skeleton className="my-1 h-4 w-28" />
-                )}
-                {typeof item.totalCount === "number" ? (
-                  <p>{item.totalCount} contributions</p>
-                ) : (
-                  <Skeleton className="my-1 h-4 w-24" />
-                )}
+            {typeof item.starsCount === "number" && item.starsCount > 0 ? (
+              <div
+                className="absolute top-2 right-2 flex items-center gap-1 text-xs text-muted-foreground"
+                title={`${item.starsCount} stars`}
+              >
+                <Star className="size-4 text-yellow-500 fill-yellow-500/20" />
+                <span>{item.starsCount}</span>
               </div>
-            </a>
+            ) : null}
+            {item.avatarUrl ? (
+              <Image
+                src={item.avatarUrl}
+                alt={item.name ?? "repository"}
+                width={40}
+                height={40}
+              />
+            ) : (
+              <Skeleton className="h-10 w-10 rounded-md" />
+            )}
+            <div>
+              {item.name ? (
+                <h4>{item.name}</h4>
+              ) : (
+                <Skeleton className="my-1 h-4 w-28" />
+              )}
+              {typeof item.totalCount === "number" ? (
+                <p>{item.totalCount} contributions</p>
+              ) : (
+                <Skeleton className="my-1 h-4 w-24" />
+              )}
+            </div>
           </Button>
         ))}
       </div>

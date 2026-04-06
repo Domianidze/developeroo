@@ -39,37 +39,35 @@ export function SkillsMarkup({ data }: SkillsMarkupProps) {
           <Button
             key={item.id}
             variant="outline"
-            size="app"
-            asChild
-            className="relative"
+            className="relative h-18 justify-start gap-4 rounded-lg px-4 text-left [&_img]:rounded-md"
             disabled={!item.url}
+            nativeButton={false}
+            render={<a href={item.url} target="_blank" rel="noreferrer" />}
           >
-            <a href={item.url} target="_blank" rel="noreferrer">
-              {item.color && item.name ? (
-                <div
-                  className="absolute top-2 right-2 size-3 rounded-full border border-background"
-                  style={{ backgroundColor: item.color }}
-                  aria-hidden
-                />
+            {item.color && item.name ? (
+              <div
+                className="absolute top-2 right-2 size-3 rounded-full border border-background"
+                style={{ backgroundColor: item.color }}
+                aria-hidden
+              />
+            ) : (
+              <Skeleton className="absolute top-2 right-2 size-3 rounded-full" />
+            )}
+            <div>
+              {item.name ? (
+                <h4>{item.name}</h4>
               ) : (
-                <Skeleton className="absolute top-2 right-2 size-3 rounded-full" />
+                <Skeleton className="my-1 h-4 w-20" />
               )}
-              <div>
-                {item.name ? (
-                  <h4>{item.name}</h4>
-                ) : (
-                  <Skeleton className="my-1 h-4 w-20" />
-                )}
-                {typeof item.percentage === "number" ? (
-                  <p>
-                    {formatPercentage(item.percentage)} usage in{" "}
-                    {item.reposCount ?? 0} repos
-                  </p>
-                ) : (
-                  <Skeleton className="my-1 h-4 w-32" />
-                )}
-              </div>
-            </a>
+              {typeof item.percentage === "number" ? (
+                <p>
+                  {formatPercentage(item.percentage)} usage in{" "}
+                  {item.reposCount ?? 0} repos
+                </p>
+              ) : (
+                <Skeleton className="my-1 h-4 w-32" />
+              )}
+            </div>
           </Button>
         ))}
       </div>

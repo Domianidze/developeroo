@@ -25,6 +25,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "a11y": {
+        "useAnchorContent": "off"
+      },
       "suspicious": {
         "noUnknownAtRules": "off"
       }

@@ -23,32 +23,35 @@ export function ContactMarkup({ email, data }: ContactMarkupProps) {
   return (
     <SectionWrapper icon={AtSign} title="Contact">
       <div className="flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" asChild disabled={!email}>
-          <a href={email ? `mailto:${email}` : undefined}>
-            {email ? (
-              <Mail className="size-4" />
-            ) : (
-              <Skeleton className="size-4 rounded-full" />
-            )}
-            {email ?? <Skeleton className="h-4 w-52" />}
-          </a>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!email}
+          nativeButton={false}
+          render={<a href={email ? `mailto:${email}` : undefined} />}
+        >
+          {email ? (
+            <Mail className="size-4" />
+          ) : (
+            <Skeleton className="size-4 rounded-full" />
+          )}
+          {email ?? <Skeleton className="h-4 w-52" />}
         </Button>
         {data.map((item) => (
           <Button
             key={item.id}
             variant="outline"
             size="sm"
-            asChild
             disabled={!item.url}
+            nativeButton={false}
+            render={<a href={item.url} target="_blank" rel="noreferrer" />}
           >
-            <a href={item.url} target="_blank" rel="noreferrer">
-              {item.url ? (
-                <SocialIcon as="div" url={item.url} className="size-4!" />
-              ) : (
-                <Skeleton className="size-4 rounded-full" />
-              )}
-              {item.label ?? <Skeleton className="h-4 w-42" />}
-            </a>
+            {item.url ? (
+              <SocialIcon as="div" url={item.url} className="size-4!" />
+            ) : (
+              <Skeleton className="size-4 rounded-full" />
+            )}
+            {item.label ?? <Skeleton className="h-4 w-42" />}
           </Button>
         ))}
       </div>
