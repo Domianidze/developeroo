@@ -1,5 +1,5 @@
-import { randomBytes } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
 
 const key = randomBytes(32).toString("base64");
 
