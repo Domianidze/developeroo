@@ -28,6 +28,13 @@
       "a11y": {
         "useAnchorContent": "off"
       },
+      "correctness": {
+        "useExhaustiveDependencies": "off",
+        "noUnusedImports": {
+          "fix": "safe",
+          "level": "error"
+        }
+      },
       "suspicious": {
         "noUnknownAtRules": "off"
       }

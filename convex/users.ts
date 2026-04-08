@@ -1,6 +1,6 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import type { GenericId } from "convex/values";
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { decrypt } from "./lib/crypto";
 
 export interface CurrentUser {
@@ -9,6 +9,7 @@ export interface CurrentUser {
   image?: string;
   email?: string;
   login?: string;
+  published: boolean;
 }
 
 export const current = query({
@@ -32,6 +33,7 @@ export const current = query({
       image: user.image,
       email: user.email,
       login: user.login,
+      published: user.published ?? false,
     };
 
     return currentUser;
@@ -54,5 +56,28 @@ export const currentAccessToken = query({
     }
 
     return await decrypt(user.accessToken);
+  },
+});
+
+export const togglePublished = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const user = await ctx.db.get(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const published = !(user.published ?? false);
+
+    await ctx.db.patch(userId, { published });
+
+    return { published };
   },
 });

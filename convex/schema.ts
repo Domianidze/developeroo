@@ -14,6 +14,7 @@ export default defineSchema({
     isAnonymous: v.optional(v.boolean()),
     login: v.optional(v.string()),
     accessToken: v.optional(v.string()),
+    published: v.optional(v.boolean()),
   })
     .index("email", ["email"])
     .index("phone", ["phone"]),

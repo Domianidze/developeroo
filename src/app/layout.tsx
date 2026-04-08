@@ -1,6 +1,7 @@
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components";
+import { ThemeProvider, TooltipProvider } from "@/components";
+import { ConvexClientProvider } from "@/providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,9 +30,11 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ConvexAuthNextjsServerProvider>
-            {children}
-          </ConvexAuthNextjsServerProvider>
+          <TooltipProvider>
+            <ConvexAuthNextjsServerProvider>
+              <ConvexClientProvider>{children}</ConvexClientProvider>
+            </ConvexAuthNextjsServerProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
