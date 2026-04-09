@@ -4,6 +4,7 @@ import { cn } from "@/lib";
 import { type GitHubAuthMode, getGitHubClient } from "@/lib/server";
 import { Contact, ContactMarkup } from "./contact";
 import { Contributions, ContributionsMarkup } from "./contributions";
+import { Footer } from "./footer";
 import { Overview, OverviewMarkup } from "./overview";
 import { Profile, ProfileMarkup } from "./profile";
 import { Repositories, RepositoriesMarkup } from "./repositories";
@@ -45,6 +46,7 @@ export async function Portfolio({ login, authMode, email }: PortfolioProps) {
       <Suspense fallback={<ContactMarkup />}>
         <Contact login={login} email={email} octokit={octokit} />
       </Suspense>
+      <Footer />
     </div>
   );
 }
