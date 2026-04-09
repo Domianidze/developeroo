@@ -5,6 +5,7 @@ import { encrypt } from "./lib/crypto";
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   providers: [
     GitHub({
+      issuer: "https://github.com/login/oauth",
       async profile(profile, tokens) {
         const accessToken = tokens.access_token
           ? await encrypt(tokens.access_token)

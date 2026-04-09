@@ -17,5 +17,6 @@ export default defineSchema({
     published: v.optional(v.boolean()),
   })
     .index("email", ["email"])
-    .index("phone", ["phone"]),
+    .index("phone", ["phone"])
+    .index("login", ["login"]),
 });
