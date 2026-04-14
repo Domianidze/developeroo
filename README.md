@@ -1,46 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<img src="./public/logo.svg#gh-light-mode-only" alt="Developeroo" width="72">
+<img src="./public/logo-dark.svg#gh-dark-mode-only" alt="Developeroo" width="72">
+
+Developeroo is a GitHub-powered developer portfolio builder.
+
+Sign in with GitHub, generate a portfolio from your profile and repositories, publish it on the Developeroo domain, and soon customize its look and connect your own domain.
+
+## Features
+
+- Generate a developer portfolio from your GitHub profile
+- Support for light and dark themes
+- Publish your portfolio at a shareable route on the Developeroo domain
+- Portfolio customization options (Coming soon)
+- More visual styling controls (Coming soon)
+- Custom domain support (Coming soon)
+
+## Stack
+
+- Next.js 16
+- React 19
+- Convex
+- Tailwind CSS 4
+- Biome
+
+## Project Structure
+
+```text
+.
+├── convex/                    # Convex auth, schema, queries, and mutations
+├── public/                    # Static assets, including logos and preview images
+├── scripts/                   # Utility scripts such as encryption key generation
+├── src/app/                   # App Router routes and layouts
+├── src/components/
+│   ├── ui/                    # Reusable shadcn/ui-style primitives
+│   ├── tailark/               # Tailark landing page components
+│   ├── shared/                # Shared client components used across pages
+│   ├── server/                # Server components following the same structure
+│   └── [page]/                # Page-specific components
+├── src/hooks/                 # Custom React hooks
+├── src/lib/                   # Shared utilities and server helpers
+└── src/providers/             # App-level providers
+```
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment variables
+
+Copy `.env.example` to `.env.local` and fill in the values:
+
+```bash
+cp .env.example .env.local
+```
+
+Required variables:
+
+- `GITHUB_TOKEN` for reading GitHub data
+
+`CONVEX_DEPLOYMENT`, `NEXT_PUBLIC_CONVEX_URL`, and `NEXT_PUBLIC_CONVEX_SITE_URL` are set automatically when you run `npx convex dev`.
+
+You will also need these variables in your Convex environment:
+
+- `AUTH_GITHUB_ID`
+- `AUTH_GITHUB_SECRET`
+- `JWKS`
+- `JWT_PRIVATE_KEY`
+- `SITE_URL`
+
+`ENCRYPTION_KEY` is set automatically when you run `npm run generate-encryption-key`.
+
+### 3. Start Convex
+
+```bash
+npx convex dev
+```
+
+### 4. Generate an encryption key
+
+This app encrypts the GitHub access token before storing it.
+
+```bash
+npm run generate-encryption-key
+```
+
+### 5. Start the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Encryption Key
-
-Generate an app encryption key with:
+## Available Scripts
 
 ```bash
-node scripts/generate-encryption-key.mjs
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run format
+npm run generate-encryption-key
 ```
 
-This command generates a key and sets `ENCRYPTION_KEY` in Convex env.
+## Open Source
 
-## Learn More
+Issues and pull requests are welcome.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
