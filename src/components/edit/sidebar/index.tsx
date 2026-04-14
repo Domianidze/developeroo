@@ -5,12 +5,14 @@ import { Brush, Eye, Globe } from "lucide-react";
 import { type PropsWithChildren, useState } from "react";
 import {
   Button,
+  Loader,
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
+  Spinner,
   Tabs,
   TabsContent,
   TabsList,
@@ -113,13 +115,22 @@ export function EditSidebar({
           </div>
         </SidebarContent>
         <SidebarFooter className="p-5 pt-0">
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => signOut()}
-          >
-            Log out
-          </Button>
+          <Loader>
+            {({ isLoading, startLoading }) => (
+              <Button
+                variant="outline"
+                className="w-full"
+                disabled={isLoading}
+                onClick={() => {
+                  startLoading();
+                  signOut();
+                }}
+              >
+                {isLoading && <Spinner />}
+                Log out
+              </Button>
+            )}
+          </Loader>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>

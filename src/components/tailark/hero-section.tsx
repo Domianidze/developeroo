@@ -4,7 +4,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import type { Variants } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button, Logo } from "@/components";
+import { Button, Loader, Logo, Spinner } from "@/components";
 import { AnimatedGroup } from "./animated-group";
 import { TextEffect } from "./text-effect";
 
@@ -127,13 +127,22 @@ export default function HeroSection() {
                   key={1}
                   className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
                 >
-                  <Button
-                    size="lg"
-                    className="rounded-xl px-5 text-base"
-                    onClick={() => signIn("github")}
-                  >
-                    <span className="text-nowrap">Get started</span>
-                  </Button>
+                  <Loader>
+                    {({ isLoading, startLoading }) => (
+                      <Button
+                        size="lg"
+                        className="rounded-xl px-5 text-base"
+                        disabled={isLoading}
+                        onClick={() => {
+                          startLoading();
+                          signIn("github");
+                        }}
+                      >
+                        {isLoading && <Spinner />}
+                        <span className="text-nowrap">Get started</span>
+                      </Button>
+                    )}
+                  </Loader>
                 </div>
                 <Button
                   key={2}

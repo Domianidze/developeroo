@@ -2,7 +2,7 @@
 
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Check } from "lucide-react";
-import { Button } from "@/components";
+import { Button, Loader, Spinner } from "@/components";
 
 export default function Pricing() {
   const { signIn } = useAuthActions();
@@ -26,13 +26,22 @@ export default function Pricing() {
                 </span>
               </div>
 
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => signIn("github")}
-              >
-                Get Started
-              </Button>
+              <Loader>
+                {({ isLoading, startLoading }) => (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    disabled={isLoading}
+                    onClick={() => {
+                      startLoading();
+                      signIn("github");
+                    }}
+                  >
+                    {isLoading && <Spinner />}
+                    Get Started
+                  </Button>
+                )}
+              </Loader>
 
               <hr className="border-dashed" />
 

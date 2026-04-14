@@ -5,6 +5,7 @@ export * from "./separator";
 export * from "./sheet";
 export * from "./sidebar";
 export * from "./skeleton";
+export * from "./spinner";
 export * from "./tabs";
 export * from "./theme-provider";
 export * from "./theme-toggle";
