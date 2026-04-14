@@ -8,14 +8,14 @@ export function Logo({ className }: LogoProps) {
   return (
     <div className={className}>
       <Image
-        src="/developeroo.svg"
+        src="/logo.svg"
         alt="logo"
         width={500}
         height={500}
         className="size-full dark:hidden"
       />
       <Image
-        src="/developeroo-dark.svg"
+        src="/logo-dark.svg"
         alt="logo"
         width={500}
         height={500}

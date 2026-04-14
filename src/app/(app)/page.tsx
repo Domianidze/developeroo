@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SignInButton } from "@/components";
+import { HeroSection, Pricing } from "@/components";
 import { RequireGuest } from "@/components/server";
 import { title } from "@/lib";
 
@@ -12,9 +12,8 @@ export const metadata: Metadata = {
 export default async function Landing() {
   return (
     <RequireGuest>
-      <div className="w-full h-screen flex flex-col justify-center items-center gap-3">
-        <SignInButton />
-      </div>
+      <HeroSection />
+      <Pricing />
     </RequireGuest>
   );
 }

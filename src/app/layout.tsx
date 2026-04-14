@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/developeroo.svg",
+        url: "/logo.svg",
         media: "(prefers-color-scheme: light)",
         type: "image/svg+xml",
       },
       {
-        url: "/developeroo-dark.svg",
+        url: "/logo-dark.svg",
         media: "(prefers-color-scheme: dark)",
         type: "image/svg+xml",
       },

@@ -15,7 +15,6 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-  ThemeToggle,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -69,7 +68,7 @@ export function EditSidebar({
     <SidebarProvider>
       <Sidebar variant="inset" className="px-0">
         <SidebarContent>
-          <div className="p-5">
+          <div className="p-3.5">
             <Tabs
               value={section}
               onValueChange={setSection}
@@ -124,9 +123,8 @@ export function EditSidebar({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div className="absolute p-5 w-full flex justify-between">
+        <div className="absolute left-5 top-5 min-[1160]:left-3 min-[1160]:top-3">
           <SidebarTrigger render={<Button variant="outline" size="icon" />} />
-          <ThemeToggle />
         </div>
         {children}
       </SidebarInset>

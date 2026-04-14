@@ -7,10 +7,10 @@ export default function AppLayout({
 }>) {
   return (
     <main className="w-full">
-      <div className="absolute p-5 w-full flex justify-end">
+      <div className="absolute z-10 top-5 right-5">
         <ThemeToggle />
       </div>
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+      <div className="min-h-dvh bg-neutral-50 dark:bg-neutral-950">
         {children}
       </div>
     </main>

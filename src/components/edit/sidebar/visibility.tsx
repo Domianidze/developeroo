@@ -94,13 +94,13 @@ export function Visibility({
         {published ? (
           <Button
             variant="link"
-            className="p-0 h-auto"
+            className="p-0 h-auto w-full "
             nativeButton={false}
             render={
               <a href={url} target="_blank" rel="noreferrer" title={url} />
             }
           >
-            {url}
+            <span className="truncate">{url}</span>
           </Button>
         ) : (
           <p className="truncate text-sm text-muted-foreground">
