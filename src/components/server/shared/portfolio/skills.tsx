@@ -172,5 +172,9 @@ export async function Skills({ login, octokit }: SkillsProps) {
     .sort((a, b) => (b.percentage ?? 0) - (a.percentage ?? 0))
     .slice(0, 6);
 
+  if (!data.length) {
+    return;
+  }
+
   return <SkillsMarkup data={data} />;
 }

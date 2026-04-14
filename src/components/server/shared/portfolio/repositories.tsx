@@ -209,5 +209,9 @@ export async function Repositories({ login, octokit }: RepositoriesProps) {
     }))
     .slice(0, 6);
 
+  if (!data.length) {
+    return;
+  }
+
   return <RepositoriesMarkup login={login} data={data} />;
 }

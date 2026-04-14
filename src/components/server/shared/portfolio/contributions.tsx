@@ -160,5 +160,9 @@ export async function Contributions({ login, octokit }: ContributionsProps) {
       starsCount: repository.stargazers.totalCount,
     }));
 
+  if (!data.length) {
+    return;
+  }
+
   return <ContributionsMarkup data={data} />;
 }

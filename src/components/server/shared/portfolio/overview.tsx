@@ -26,6 +26,10 @@ function StatCard({
   value?: number;
   skeletonClassName?: string;
 }) {
+  if (typeof value === "number" && !value) {
+    return;
+  }
+
   return (
     <Button variant="outline" size="sm" className="justify-start" disabled>
       <Icon className="size-4 text-muted-foreground" />

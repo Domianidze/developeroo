@@ -6,31 +6,46 @@ import { Skeleton } from "@/components/ui";
 import { cn } from "@/lib";
 
 function DetailWrapper({ children }: PropsWithChildren) {
-  return <div className="flex items-center gap-2">{children}</div>;
+  return (
+    <div className="flex items-center gap-2 lg:justify-center lg:first:justify-start lg:last:justify-end">
+      {children}
+    </div>
+  );
 }
 
 interface DetailsProps {
+  loaded?: boolean;
   name?: string | null;
   location?: string | null;
   company?: string | null;
   className?: string;
 }
 
-function Details({ name, location, company, className }: DetailsProps) {
+function Details({ loaded, name, location, company, className }: DetailsProps) {
+  if (loaded && !name && !location && !company) {
+    return;
+  }
+
   return (
-    <div className={cn("flex gap-4 text-sm", className)}>
-      <DetailWrapper>
-        <User />
-        {name ? <span>{name}</span> : <Skeleton className="h-4 w-30" />}
-      </DetailWrapper>
-      <DetailWrapper>
-        <MapPin />
-        {location ? <span>{location}</span> : <Skeleton className="h-4 w-30" />}
-      </DetailWrapper>
-      <DetailWrapper>
-        <Building />
-        {company ? <span>{company}</span> : <Skeleton className="h-4 w-30" />}
-      </DetailWrapper>
+    <div className={cn("grid grid-cols-3 gap-4 text-sm", className)}>
+      {(!loaded || name) && (
+        <DetailWrapper>
+          <User />
+          {loaded ? <span>{name}</span> : <Skeleton className="h-4 w-30" />}
+        </DetailWrapper>
+      )}
+      {(!loaded || location) && (
+        <DetailWrapper>
+          <MapPin />
+          {loaded ? <span>{location}</span> : <Skeleton className="h-4 w-30" />}
+        </DetailWrapper>
+      )}
+      {(!loaded || company) && (
+        <DetailWrapper>
+          <Building />
+          {loaded ? <span>{company}</span> : <Skeleton className="h-4 w-30" />}
+        </DetailWrapper>
+      )}
     </div>
   );
 }
@@ -63,27 +78,30 @@ export function ProfileMarkup({ data }: ProfileMarkupProps) {
           )}
         </div>
         <Details
+          loaded={!!data}
           name={data?.name}
           location={data?.location}
           company={data?.company}
-          className="flex-col lg:hidden"
+          className="grid-cols-1 lg:hidden"
         />
       </div>
       <div className="w-full lg:space-y-4">
         <Details
+          loaded={!!data}
           name={data?.name}
           location={data?.location}
           company={data?.company}
-          className="hidden lg:flex flex-row justify-between items-center"
+          className="hidden lg:grid"
         />
-        {data?.bio ? (
-          <p className="text-sm">{data.bio}</p>
-        ) : (
-          <div className="space-y-1">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-4/5" />
-          </div>
-        )}
+        {(!data || data.bio) &&
+          (data?.bio ? (
+            <p className="text-sm">{data.bio}</p>
+          ) : (
+            <div className="space-y-1 pt-1">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-4/5" />
+            </div>
+          ))}
       </div>
     </div>
   );
