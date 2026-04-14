@@ -114,7 +114,21 @@ export function EditSidebar({
             </Tabs>
           </div>
         </SidebarContent>
-        <SidebarFooter className="p-5 pt-0">
+        <SidebarFooter className="grid gap-2 p-5 pt-0">
+          <Button
+            variant="ghost"
+            className="w-full"
+            nativeButton={false}
+            render={
+              <a
+                href="https://github.com/Domianidze/developeroo/issues"
+                target="_blank"
+                rel="noreferrer"
+              />
+            }
+          >
+            Report issue
+          </Button>
           <Loader>
             {({ isLoading, startLoading }) => (
               <Button
