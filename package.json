@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
+    "generate-jwt-keys": "node scripts/generate-jwt-keys.mjs",
     "generate-encryption-key": "node scripts/generate-encryption-key.mjs"
   },
   "dependencies": {

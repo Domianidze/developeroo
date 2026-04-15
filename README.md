@@ -28,7 +28,7 @@ Sign in with GitHub, generate a portfolio from your profile and repositories, pu
 .
 ├── convex/                    # Convex auth, schema, queries, and mutations
 ├── public/                    # Static assets, including logos and preview images
-├── scripts/                   # Utility scripts such as encryption key generation
+├── scripts/                   # Utility scripts such as Convex environment variable generation
 ├── src/app/                   # App Router routes and layouts
 ├── src/components/
 │   ├── ui/                    # Reusable shadcn/ui-style primitives
@@ -67,11 +67,10 @@ You will also need these variables in your Convex environment:
 
 - `AUTH_GITHUB_ID`
 - `AUTH_GITHUB_SECRET`
+- `ENCRYPTION_KEY`
 - `JWKS`
 - `JWT_PRIVATE_KEY`
 - `SITE_URL`
-
-`ENCRYPTION_KEY` is set automatically when you run `npm run generate-encryption-key`.
 
 ### 3. Start Convex
 
@@ -79,12 +78,27 @@ You will also need these variables in your Convex environment:
 npx convex dev
 ```
 
-### 4. Generate an encryption key
+### 4. Generate Convex environment variables
 
-This app encrypts the GitHub access token before storing it.
+This app needs generated values for `ENCRYPTION_KEY`, `JWKS`, and `JWT_PRIVATE_KEY`.
 
 ```bash
 npm run generate-encryption-key
+npm run generate-jwt-keys
+```
+
+Then copy the printed values into your Convex environment variables:
+
+- `ENCRYPTION_KEY` from `npm run generate-encryption-key`
+- `JWKS` from `npm run generate-jwt-keys`
+- `JWT_PRIVATE_KEY` from `npm run generate-jwt-keys`
+
+You can set them in the Convex dashboard or with the Convex CLI, for example:
+
+```bash
+npx convex env set ENCRYPTION_KEY "<value>"
+npx convex env set JWKS '<value>'
+npx convex env set JWT_PRIVATE_KEY "<value>"
 ```
 
 ### 5. Start the app
@@ -104,6 +118,7 @@ npm run start
 npm run lint
 npm run format
 npm run generate-encryption-key
+npm run generate-jwt-keys
 ```
 
 ## Open Source
