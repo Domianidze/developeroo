@@ -10,9 +10,7 @@ export default function AppLayout({
       <div className="absolute top-5 right-5 z-10">
         <ThemeToggle />
       </div>
-      <div className="min-h-dvh bg-neutral-50 dark:bg-neutral-950">
-        {children}
-      </div>
+      <div className="min-h-dvh">{children}</div>
     </main>
   );
 }

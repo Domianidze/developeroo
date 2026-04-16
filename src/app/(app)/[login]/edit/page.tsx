@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { EditSidebar } from "@/components";
 import { Portfolio, RequireAuth } from "@/components/server";
 import { title } from "@/lib";
-import { getRequestBaseUrl } from "@/lib/server";
 
 interface PortfolioEditProps {
   params: Promise<{ login: string }>;
@@ -23,7 +22,7 @@ export async function generateMetadata({
 export default async function PortfolioEdit({ params }: PortfolioEditProps) {
   const { login } = await params;
 
-  const baseUrl = await getRequestBaseUrl();
+  const baseUrl = process.env.BASE_URL ?? "";
 
   return (
     <RequireAuth>

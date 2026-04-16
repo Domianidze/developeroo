@@ -127,7 +127,7 @@ export function EditSidebar({
               />
             }
           >
-            Report issue
+            Report an issue
           </Button>
           <Loader>
             {({ isLoading, startLoading }) => (

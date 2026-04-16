@@ -34,7 +34,7 @@ export default function HeroSection() {
   return (
     <div className="overflow-hidden">
       <div className="absolute top-5 left-5 flex size-8 items-center">
-        <Logo className="size-6" />
+        <Logo className="size-6" priority />
       </div>
       <div
         aria-hidden
@@ -46,47 +46,6 @@ export default function HeroSection() {
       </div>
       <section>
         <div className="relative pt-15">
-          <AnimatedGroup
-            variants={{
-              container: {
-                visible: {
-                  transition: {
-                    delayChildren: 1,
-                  },
-                },
-              },
-              item: {
-                hidden: {
-                  opacity: 0,
-                  y: 20,
-                },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    type: "spring",
-                    bounce: 0.3,
-                    duration: 2,
-                  },
-                },
-              },
-            }}
-            className="mask-b-from-35% mask-b-to-90% -z-20 absolute inset-0 top-56 lg:top-32"
-          >
-            <Image
-              src="https://ik.imagekit.io/lrigu76hy/tailark/night-background.jpg?updatedAt=1745733451120"
-              alt="background"
-              className="hidden size-full dark:block"
-              width="3276"
-              height="4095"
-            />
-          </AnimatedGroup>
-
-          <div
-            aria-hidden
-            className="-z-10 absolute inset-0 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"
-          />
-
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center sm:mx-auto lg:mt-0 lg:mr-auto">
               <TextEffect
@@ -184,6 +143,7 @@ export default function HeroSection() {
                   alt="app screen"
                   width="2700"
                   height="1440"
+                  priority
                 />
                 <Image
                   className="relative z-2 rounded border border-border/25 md:rounded-xl dark:hidden"
@@ -191,6 +151,7 @@ export default function HeroSection() {
                   alt="app screen"
                   width="2700"
                   height="1440"
+                  priority
                 />
               </div>
             </div>

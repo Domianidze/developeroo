@@ -5,7 +5,10 @@ import { ThemeProvider, TooltipProvider } from "@/components";
 import { ConvexClientProvider } from "@/providers";
 import "./globals.css";
 
+const baseUrl = process.env.BASE_URL;
+
 export const metadata: Metadata = {
+  metadataBase: baseUrl ? new URL(baseUrl) : "",
   icons: {
     icon: [
       {
@@ -19,6 +22,18 @@ export const metadata: Metadata = {
         type: "image/svg+xml",
       },
     ],
+  },
+  openGraph: {
+    images: [
+      {
+        url: "/opengraph.png",
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/opengraph.png"],
   },
 };
 
