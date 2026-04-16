@@ -70,7 +70,7 @@ export function EditSidebar({
     <SidebarProvider>
       <Sidebar variant="inset" className="px-0">
         <SidebarContent>
-          <div className="p-3.5">
+          <div className="p-5 lg:p-3.5">
             <Tabs
               value={section}
               onValueChange={setSection}
