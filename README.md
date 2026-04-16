@@ -60,6 +60,9 @@ cp .env.example .env.local
 Required variables:
 
 - `GITHUB_TOKEN` for reading GitHub data
+- `SITE_URL` for absolute app URLs and metadata images
+
+For local development, set `SITE_URL=http://localhost:3000`.
 
 `CONVEX_DEPLOYMENT`, `NEXT_PUBLIC_CONVEX_URL`, and `NEXT_PUBLIC_CONVEX_SITE_URL` are set automatically when you run `npx convex dev`.
 
