@@ -1,4 +1,6 @@
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider, TooltipProvider } from "@/components";
@@ -65,7 +67,11 @@ export default async function RootLayout({
         >
           <TooltipProvider>
             <ConvexAuthNextjsServerProvider>
-              <ConvexClientProvider>{children}</ConvexClientProvider>
+              <ConvexClientProvider>
+                {children}
+                <Analytics />
+                <SpeedInsights />
+              </ConvexClientProvider>
             </ConvexAuthNextjsServerProvider>
           </TooltipProvider>
         </ThemeProvider>
