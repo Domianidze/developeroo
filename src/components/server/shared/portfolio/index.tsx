@@ -22,7 +22,7 @@ export async function Portfolio({ login, authMode, email }: PortfolioProps) {
   return (
     <div
       className={cn(
-        "py-10 lg:py-20 mx-auto flex flex-col gap-10 w-4xl max-w-full px-5",
+        "mx-auto flex w-4xl max-w-full flex-col gap-10 px-5 py-10 lg:py-20",
         authMode === "owner" && "py-15",
       )}
     >

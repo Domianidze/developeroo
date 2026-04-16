@@ -7,7 +7,7 @@ import { cn } from "@/lib";
 
 function DetailWrapper({ children }: PropsWithChildren) {
   return (
-    <div className="flex items-center gap-2 lg:justify-center lg:first:justify-start lg:last:justify-end">
+    <div className="flex items-center gap-2 lg:justify-center lg:last:justify-end lg:first:justify-start">
       {children}
     </div>
   );
@@ -62,7 +62,7 @@ interface ProfileMarkupProps {
 
 export function ProfileMarkup({ data }: ProfileMarkupProps) {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
       <div className="flex items-center gap-4 lg:block">
         <div className="relative size-37.5 shrink-0 overflow-hidden rounded-xl border shadow-xs dark:border-input">
           {data?.avatarUrl ? (

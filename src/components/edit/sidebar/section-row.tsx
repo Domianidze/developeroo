@@ -11,7 +11,7 @@ export function SectionRow({ action, children, title }: SectionRowProps) {
     <>
       <section className="space-y-2">
         <div className="space-y-1">
-          <p className="text-sm font-medium">{title}</p>
+          <p className="font-medium text-sm">{title}</p>
           {children}
         </div>
         {action}

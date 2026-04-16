@@ -35,7 +35,7 @@ export function RepositoriesMarkup({ login, data }: RepositoriesMarkupProps) {
         login ? `https://github.com/${login}?tab=repositories` : undefined
       }
     >
-      <div className="grid lg:grid-cols-3 gap-4">
+      <div className="grid gap-4 lg:grid-cols-3">
         {markupData.map((item) => (
           <Button
             key={item.id}
@@ -53,7 +53,7 @@ export function RepositoriesMarkup({ login, data }: RepositoriesMarkupProps) {
                     className="flex items-center gap-1 text-xs"
                     title={`${item.starsCount} stars`}
                   >
-                    <Star className="size-4 text-yellow-500 fill-yellow-500/20" />
+                    <Star className="size-4 fill-yellow-500/20 text-yellow-500" />
                     <span>{item.starsCount}</span>
                   </div>
                 ) : null}

@@ -35,6 +35,15 @@
           "level": "error"
         }
       },
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "error",
+          "options": {
+            "functions": ["cva", "cn", "clsx"]
+          }
+        }
+      },
       "suspicious": {
         "noUnknownAtRules": "off"
       }

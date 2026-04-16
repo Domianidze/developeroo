@@ -71,7 +71,7 @@ export function Visibility({
       >
         <p
           className={cn(
-            "text-sm text-muted-foreground transition-colors",
+            "text-muted-foreground text-sm transition-colors",
             published && "text-primary",
           )}
         >
@@ -94,7 +94,7 @@ export function Visibility({
         {published ? (
           <Button
             variant="link"
-            className="p-0 h-auto w-full "
+            className="h-auto w-full p-0"
             nativeButton={false}
             render={
               <a href={url} target="_blank" rel="noreferrer" title={url} />
@@ -103,7 +103,7 @@ export function Visibility({
             <span className="truncate">{url}</span>
           </Button>
         ) : (
-          <p className="truncate text-sm text-muted-foreground">
+          <p className="truncate text-muted-foreground text-sm">
             Publish to get a shareable link
           </p>
         )}

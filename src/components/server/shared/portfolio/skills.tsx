@@ -34,7 +34,7 @@ export function SkillsMarkup({ data }: SkillsMarkupProps) {
 
   return (
     <SectionWrapper icon={Code2} title="Skills">
-      <div className="grid lg:grid-cols-3 gap-4">
+      <div className="grid gap-4 lg:grid-cols-3">
         {markupData.map((item) => (
           <Button
             key={item.id}

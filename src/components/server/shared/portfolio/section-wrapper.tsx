@@ -30,7 +30,7 @@ export function SectionWrapper({
             href={viewAllUrl}
             target="_blank"
             rel="noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground transition-colors hover:text-foreground"
             aria-label={`View all ${title.toLowerCase()}`}
           >
             <ExternalLink className="size-4" aria-hidden />

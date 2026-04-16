@@ -148,7 +148,7 @@ export function EditSidebar({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div className="absolute left-5 top-5 min-[1160]:left-3 min-[1160]:top-3">
+        <div className="absolute top-5 left-5 min-[1160]:top-3 min-[1160]:left-3">
           <SidebarTrigger render={<Button variant="outline" size="icon" />} />
         </div>
         {children}

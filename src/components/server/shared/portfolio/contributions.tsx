@@ -29,7 +29,7 @@ export function ContributionsMarkup({ data }: ContributionsMarkupProps) {
 
   return (
     <SectionWrapper icon={GitPullRequest} title="Contributions">
-      <div className="grid lg:grid-cols-3 gap-4">
+      <div className="grid gap-4 lg:grid-cols-3">
         {markupData.map((item) => (
           <Button
             key={item.id}
@@ -41,10 +41,10 @@ export function ContributionsMarkup({ data }: ContributionsMarkupProps) {
           >
             {typeof item.starsCount === "number" && item.starsCount > 0 ? (
               <div
-                className="absolute top-2 right-2 flex items-center gap-1 text-xs text-muted-foreground"
+                className="absolute top-2 right-2 flex items-center gap-1 text-muted-foreground text-xs"
                 title={`${item.starsCount} stars`}
               >
-                <Star className="size-4 text-yellow-500 fill-yellow-500/20" />
+                <Star className="size-4 fill-yellow-500/20 text-yellow-500" />
                 <span>{item.starsCount}</span>
               </div>
             ) : null}
